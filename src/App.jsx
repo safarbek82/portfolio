@@ -1,143 +1,196 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Github, Mail, ExternalLink } from "lucide-react";
-import profilePic from './assets/photo_2026-03-04_06-37-57.jpg'; // сенин сүрөтүң
+import {
+    Github,
+    Mail,
+    ExternalLink,
+    Download,
+    Sun,
+    Moon,
+} from "lucide-react";
+
+import profilePic from "./assets/photo_2026-03-04_06-37-57.jpg";
+import project1 from "./assets/Screenshot From 2026-03-04 19-37-21.png";
+import project2 from "./assets/Screenshot From 2026-03-04 19-35-04.png";
 
 export default function App() {
+    const [dark, setDark] = useState(true);
+    const [lang, setLang] = useState("en");
+    const [cursor, setCursor] = useState({ x: 0, y: 0 });
+
+    useEffect(() => {
+        const move = (e) => setCursor({ x: e.clientX, y: e.clientY });
+        window.addEventListener("mousemove", move);
+        return () => window.removeEventListener("mousemove", move);
+    }, []);
+
+    const t = {
+        en: {
+            aboutTitle: "About Me",
+            aboutText:
+                "Full Stack Developer focused on scalable backend systems and modern frontend applications. Experienced in PHP, Symfony, React and Vue. I build production-ready systems from idea to deployment.",
+            skills: "Tech Stack",
+            projects: "Projects",
+            contact: "Contact",
+        },
+        ru: {
+            aboutTitle: "Обо мне",
+            aboutText:
+                "Full Stack разработчик, создающий масштабируемые backend-системы и современные frontend-приложения. Опыт работы с PHP, Symfony, React и Vue. Разрабатываю проекты от идеи до продакшена.",
+            skills: "Технологии",
+            projects: "Проекты",
+            contact: "Контакт",
+        },
+    };
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white">
-            <div className="max-w-6xl mx-auto px-6 py-16 space-y-24">
+        <div className={dark ? "dark" : ""}>
+            <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white transition-colors duration-500">
 
-                {/* HERO */}
-                <motion.section
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="text-center space-y-6"
-                >
-                    <img src={profilePic} alt="Sapar" className="w-32 h-32 mx-auto rounded-full border-4 border-green-500 shadow-lg" />
-                    <h1 className="text-6xl font-extrabold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-                        Saparbek Kodirov
-                    </h1>
-                    <p className="text-xl text-gray-300">
-                        Full Stack Developer (Junior / Middle)
-                    </p>
-                    <p className="text-sm text-gray-400">coderovsfr.ru</p>
+                {/* Animated Cursor */}
+                <motion.div
+                    className="fixed w-6 h-6 bg-green-500 rounded-full pointer-events-none mix-blend-difference z-50"
+                    animate={{ x: cursor.x - 12, y: cursor.y - 12 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                />
 
-                    <div className="flex justify-center gap-6 pt-6">
-                        <a
-                            href="mailto:coderovsfr@gmail.com"
-                            className="flex items-center gap-2 px-6 py-3 bg-green-500 hover:bg-green-600 rounded-2xl transition transform hover:scale-110 shadow-lg"
-                        >
-                            <Mail size={18} /> Contact
-                        </a>
+                {/* NAV */}
+                <nav className="fixed top-0 w-full backdrop-blur-md bg-white/30 dark:bg-black/30 z-40">
+                    <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                        <div className="font-bold">Sapar</div>
 
-                        <a
-                            href="https://github.com/coderovsfr"
-                            target="_blank"
-                            className="flex items-center gap-2 px-6 py-3 border border-gray-500 rounded-2xl hover:bg-gray-700 transition transform hover:scale-110"
-                        >
-                            <Github size={18} /> GitHub
-                        </a>
+                        <div className="flex gap-6 items-center text-sm">
+                            <a href="#about">About</a>
+                            <a href="#skills">Skills</a>
+                            <a href="#projects">Projects</a>
+
+                            <button onClick={() => setLang(lang === "en" ? "ru" : "en")}>
+                                {lang.toUpperCase()}
+                            </button>
+
+                            <button onClick={() => setDark(!dark)}>
+                                {dark ? <Sun size={18} /> : <Moon size={18} />}
+                            </button>
+                        </div>
                     </div>
-                </motion.section>
+                </nav>
 
-                {/* ABOUT */}
-                <motion.section
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ duration: 0.8 }}
-                    className="max-w-3xl mx-auto text-center space-y-6"
-                >
-                    <h2 className="text-3xl font-bold">About Me</h2>
-                    <p className="text-gray-300 leading-relaxed">
-                        I build scalable and modern web applications from idea to deployment.
-                        My core stack includes PHP & Symfony for backend and Vue / React for frontend.
-                        I focus on clean architecture, performance, and great user experience.
-                    </p>
-                </motion.section>
+                <div className="max-w-6xl mx-auto px-6 pt-32 pb-20 space-y-32">
 
-                {/* SKILLS */}
-                <section className="space-y-10">
-                    <h2 className="text-3xl font-bold text-center">Tech Stack</h2>
-
-                    <div className="grid md:grid-cols-3 gap-10">
-                        <TechCard title="Backend" skills={[
-                            { logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg", name: "PHP" },
-                            { logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/symfony/symfony-original.svg", name: "Symfony" },
-                            { logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg", name: "MySQL" },
-                        ]} />
-
-                        <TechCard title="Frontend" skills={[
-                            { logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg", name: "Vue.js" },
-                            { logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg", name: "React.js" },
-                            { logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg", name: "Vite" },
-                            { logo: "https://pinia.vuejs.org/logo.svg", name: "Pinia" },
-                            { logo: "https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg", name: "Tailwind CSS" },
-                        ]} />
-
-                        <TechCard title="Tools" skills={[
-                            { logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg", name: "GitHub" },
-                            { logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/gitlab/gitlab-original.svg", name: "GitLab" },
-                            { logo: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg", name: "Figma" },
-                            { logo: "https://cdn-icons-png.flaticon.com/512/2111/2111646.png", name: "Telegram Bot" },
-                        ]} />
-                    </div>
-                </section>
-
-                {/* PROJECTS */}
-                <section className="space-y-10">
-                    <h2 className="text-3xl font-bold text-center">Projects</h2>
-
-                    <div className="grid md:grid-cols-2 gap-10">
-                        <ProjectCard
-                            title="Dorinzhstroydostor.ru"
-                            description="Construction company website built from scratch and deployed to production."
+                    {/* HERO */}
+                    <section className="text-center space-y-6">
+                        <img
+                            src={profilePic}
+                            alt="Sapar"
+                            className="w-32 h-32 mx-auto rounded-full border-4 border-green-500"
                         />
 
-                        <ProjectCard
-                            title="Finance Up"
-                            description="Modern financial web application with backend logic and responsive UI."
-                        />
-                    </div>
-                </section>
+                        <h1 className="text-5xl font-extrabold">
+                            Saparbek Kodirov
+                        </h1>
 
-                <footer className="text-center text-gray-500 pt-16">
-                    © {new Date().getFullYear()} Sapar. Built with React & Tailwind.
-                </footer>
+                        <p className="text-gray-500 dark:text-gray-400">
+                            Full Stack Developer • PHP • Symfony • React • Vue
+                        </p>
+
+                        <div className="flex justify-center gap-6 pt-4 flex-wrap">
+                            <a
+                                href="/cv.pdf"
+                                className="px-6 py-3 bg-green-500 text-white rounded-xl flex items-center gap-2"
+                            >
+                                <Download size={18} /> CV
+                            </a>
+
+                            <a
+                                href="mailto:coderovsfr@gmail.com"
+                                className="px-6 py-3 border rounded-xl flex items-center gap-2"
+                            >
+                                <Mail size={18} /> {t[lang].contact}
+                            </a>
+
+                            <a
+                                href="https://github.com/safarbek82"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="px-6 py-3 border rounded-xl flex items-center gap-2"
+                            >
+                                <Github size={18} /> GitHub
+                            </a>
+                        </div>
+                    </section>
+
+                    {/* ABOUT */}
+                    <section id="about" className="text-center max-w-3xl mx-auto space-y-6">
+                        <h2 className="text-3xl font-bold">{t[lang].aboutTitle}</h2>
+                        <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            {t[lang].aboutText}
+                        </p>
+                    </section>
+
+                    {/* SKILLS */}
+                    <section id="skills" className="space-y-10">
+                        <h2 className="text-3xl font-bold text-center">
+                            {t[lang].skills}
+                        </h2>
+
+                        <div className="grid md:grid-cols-3 gap-10 text-center">
+                            {["PHP", "Symfony", "React", "Vue", "MySQL", "Tailwind"].map(
+                                (skill, i) => (
+                                    <motion.div
+                                        key={i}
+                                        whileHover={{ scale: 1.1 }}
+                                        className="p-6 border rounded-2xl"
+                                    >
+                                        {skill}
+                                    </motion.div>
+                                )
+                            )}
+                        </div>
+                    </section>
+
+                    {/* PROJECTS */}
+                    <section id="projects" className="space-y-10">
+                        <h2 className="text-3xl font-bold text-center">
+                            {t[lang].projects}
+                        </h2>
+
+                        <div className="grid md:grid-cols-2 gap-10">
+                            <ProjectCard
+                                title="Dorinzhstroydostor.ru"
+                                image={project1}
+                                link="https://dorinzhstroydostor.ru"
+                            />
+                            <ProjectCard
+                                title="Finance Up"
+                                image={project2}
+                                link="#"
+                            />
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
     );
 }
 
-function TechCard({ title, skills }) {
-    return (
-        <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="bg-gray-800 p-8 rounded-3xl shadow-xl space-y-5 border border-gray-700"
-        >
-            <h3 className="text-xl font-semibold">{title}</h3>
-            {skills.map((skill, index) => (
-                <div key={index} className="flex items-center gap-3">
-                    <img src={skill.logo} alt={skill.name} className="w-6 h-6" />
-                    <span className="text-gray-300">{skill.name}</span>
-                </div>
-            ))}
-        </motion.div>
-    );
-}
-
-function ProjectCard({ title, description }) {
+function ProjectCard({ title, image, link }) {
     return (
         <motion.div
             whileHover={{ y: -10 }}
-            className="bg-gray-800 p-8 rounded-3xl shadow-xl border border-gray-700 space-y-4"
+            className="border rounded-2xl overflow-hidden"
         >
-            <h3 className="text-xl font-semibold">{title}</h3>
-            <p className="text-gray-400">{description}</p>
-            <button className="flex items-center gap-2 text-green-400 hover:text-green-300 transition">
-                View Project <ExternalLink size={16} />
-            </button>
+            <img src={image} alt={title} className="w-full h-48 object-cover" />
+            <div className="p-6">
+                <h3 className="text-xl font-semibold mb-4">{title}</h3>
+                <a
+                    href={link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-green-500 flex items-center gap-2"
+                >
+                    View <ExternalLink size={16} />
+                </a>
+            </div>
         </motion.div>
     );
 }
