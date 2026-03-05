@@ -81,7 +81,7 @@ export default function App() {
                     <section className="text-center space-y-6">
                         <img
                             src={profilePic}
-                            alt="Sapar"
+                            alt="Saparbek"
                             className="w-32 h-32 mx-auto rounded-full border-4 border-green-500"
                         />
 
