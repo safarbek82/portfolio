@@ -86,7 +86,7 @@ export default function App() {
                         />
 
                         <h1 className="text-5xl font-extrabold">
-                            Saparbek Kodirov
+                            Saparbek Kodirov Dev
                         </h1>
 
                         <p className="text-gray-500 dark:text-gray-400">
